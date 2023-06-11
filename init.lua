@@ -1,20 +1,20 @@
 scramble = {}
 
-scramble.hash = function(name)
+function scramble.hash(name)
     return "0x" .. string.sub(minetest.sha1(name), 1, 8)
 end
 
 scramble.is_hashed = function(name)
     local is_hashed = false
-    for name,_ in pairs(minetest.registered_nodes) do
-        if string.sub(name,1,2, "0x") then
+    for name, _ in pairs(minetest.registered_nodes) do
+        if string.sub(name, 1, 2, "0x") then
             is_hashed = true
         end
     end
     return is_hashed
 end
 
-scramble.unhash = function(hashed_name)
+function scramble.unhash(hashed_name)
     local unhashed_name
     for alias, original_name in pairs(minetest.registered_aliases) do
         if hashed_name == original_name then
@@ -38,7 +38,9 @@ minetest.register_on_mods_loaded(function()
             -- print("Scrambling: " .. name .. " -> " .. scramble.hash(name))
         end
         for alias, original_name in pairs(aliases) do
-            if alias ~= "ignore" and alias ~= "air" and original_name ~= "" and (nodes[original_name] and nodes[original_name].liquidtype and nodes[original_name].liquidtype ~= "source") then
+            if alias ~= "ignore" and alias ~= "air" and original_name ~= "" and
+                (nodes[original_name] and nodes[original_name].liquidtype and nodes[original_name].liquidtype ~=
+                    "source") then
                 -- print("Alias before: " .. alias .. " -> " .. original_name)
                 minetest.registered_aliases[alias] = nil
                 minetest.register_alias(alias, scramble.hash(original_name))
