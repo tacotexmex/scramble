@@ -19,7 +19,7 @@ function scramble.unhash(hashed_name)
     for alias, original_name in pairs(minetest.registered_aliases) do
         if hashed_name == original_name then
             if string.find(alias, ":") then
-                unhashed_name = dump(alias)
+                unhashed_name = alias
             end
         end
     end
